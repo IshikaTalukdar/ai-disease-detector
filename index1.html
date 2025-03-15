@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Disease Detector</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+</head>
+<body>
+    <h2>AI-Powered Skin Disease Detection</h2>
+    <input type="file" id="imageUpload" accept="image/*">
+    <button onclick="analyzeImage()">Check Disease</button>
+    <p id="result"></p>
+
+    <script>
+        async function analyzeImage() {
+            let fileInput = document.getElementById("imageUpload");
+            let file = fileInput.files[0];
+            if (!file) {
+                alert("Please upload an image.");
+                return;
+            }
+
+            let model = await mobilenet.load();
+            let img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            img.onload = async function() {
+                let prediction = await model.classify(img);
+                document.getElementById("result").innerText = "Result: " + prediction[0].className;
+            };
+        }
+    </script>
+</body>
+</html>
